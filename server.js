@@ -3,6 +3,9 @@ const app = express();
 app.use(express.json());
 const Joi = require("joi");
 
+app.get("/", (req, res) => {
+  res.send("backend running");
+});
 
 app.get("/api/notes", (req, res) => {
   res.send(notes)
