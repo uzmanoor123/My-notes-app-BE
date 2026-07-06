@@ -1,6 +1,8 @@
-var express = require("express");
+const express = require("express");
+const cors = require("cors");
 const app = express();
 app.use(express.json());
+app.use(cors({origin: "*"}))
 const Joi = require("joi");
 
 app.get("/", (req, res) => {
@@ -22,25 +24,33 @@ const notes = [
     title: "this is notes title",
     description: "this is notes description",
   },
+    {
+    id: 3,
+    title: "this is notes title",
+    description: "this is notes description",
+  },
 ];
 app.post("/api/notes", (req, res) => {
-  const schema = Joi.object({
-    title: Joi.string().required().min(3).max(100),
-    description: Joi.string().required().min(3).max(500),
-  });
-  const result = schema.validate(req.body);
-  if (result.error) {
-    res
-      .status(400)
-      .send(
-        "Title and Description is required and should be minimum 3 character required",
-      );
-    return;
-  }
+  // const schema = Joi.object({
+  //   title: Joi.string().required(),
+  //   description: Joi.string().required(),
+  // });
+  // const result = schema.validate(req.body);
+  // console.log(result.error.details);
+  // if (result.error) {
+  //   res
+  //     .status(400)
+  //     .send(
+  //       "Title and Description is required",
+  //     );
+  //   return;
+  // }
   const note = {
     id: notes.length + 1,
     title: req.body.title,
     description: req.body.description,
+    createdAt: Date.now(),
+    updatedAt: null,
   };
   notes.push(note);
   res.send(note);
@@ -60,21 +70,20 @@ app.put('/api/notes/:id', (req,res)=>{
     res.status(404).send("The selected note is not found");
     return;
   }
-    const schema = Joi.object({
-    title: Joi.string().required().min(3).max(100),
-    description: Joi.string().required().min(3).max(500),
-  });
-    const result = schema.validate(req.body);
-  if (result.error) {
-    res
-      .status(400)
-      .send(
-        "Title and Description is required and should be minimum 3 character required",
-      );
-    return;
-  }
+//     const schema = Joi.object({
+//     title: Joi.string().required(),
+//     description: Joi.string().required(),
+//   });
+//     const result = schema.validate(req.body);
+//     console.log(result);
+
+// if (result.error) {
+//   console.log(result.error.details);
+//   return res.status(400).send(result.error.details[0].message);
+// }
   note.title= req.body.title;
   note.description= req.body.description;
+   note.updatedAt = Date.now();
   res.send(note);
 })
 app.delete('/api/notes/:id', (req,res)=>{
