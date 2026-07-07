@@ -14,37 +14,13 @@ app.get("/api/notes", (req, res) => {
 });
 
 const notes = [
-  {
-    id: 1,
-    title: "this is title",
-    description: "this is description",
-  },
-  {
-    id: 2,
-    title: "this is notes title",
-    description: "this is notes description",
-  },
-    {
-    id: 3,
-    title: "this is notes title",
-    description: "this is notes description",
-  },
 ];
 app.post("/api/notes", (req, res) => {
-  // const schema = Joi.object({
-  //   title: Joi.string().required(),
-  //   description: Joi.string().required(),
-  // });
-  // const result = schema.validate(req.body);
-  // console.log(result.error.details);
-  // if (result.error) {
-  //   res
-  //     .status(400)
-  //     .send(
-  //       "Title and Description is required",
-  //     );
-  //   return;
-  // }
+
+  const {title, description, id, createdAt, updatedAt} = req.body;
+  if(!title || !description) {
+    return res.status(400).json({error: "title and description is required"});
+  }
   const note = {
     id: notes.length + 1,
     title: req.body.title,
@@ -70,17 +46,10 @@ app.put('/api/notes/:id', (req,res)=>{
     res.status(404).send("The selected note is not found");
     return;
   }
-//     const schema = Joi.object({
-//     title: Joi.string().required(),
-//     description: Joi.string().required(),
-//   });
-//     const result = schema.validate(req.body);
-//     console.log(result);
-
-// if (result.error) {
-//   console.log(result.error.details);
-//   return res.status(400).send(result.error.details[0].message);
-// }
+  const {title, description, id, createdAt, updatedAt} = req.body;
+  if(!title || !description) {
+    return res.status(400).json({error: "title and description is required"});
+  }
   note.title= req.body.title;
   note.description= req.body.description;
    note.updatedAt = Date.now();
