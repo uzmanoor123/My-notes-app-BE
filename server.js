@@ -8,6 +8,9 @@ app.use(cors({ origin: "*" }));
 const notesRoutes = require('./routes/notesRoutes')
 app.use('/api/notes', notesRoutes)
 
+const userRoutes = require('./routes/userRoutes')
+app.use('/api/auth', userRoutes)
+
 app.get("/", (req, res) => {
   res.send("backend running");
 });
