@@ -2,7 +2,9 @@ const Note = require('../models/Notes')
 
 const getAllNotes = async(req, res) => {
   try{
-const notes = await Note.find();
+const notes = await Note.find({
+  userId: req.user.id
+})
 res.status(200).send(notes)
   }
   catch(error){
@@ -19,7 +21,8 @@ const addNotes = async(req, res) => {
   }
   const note = new Note({
     title,
-    description
+    description,
+    userId: req.user.id
   })
   await note.save();
   res.status(201).json(note);
@@ -32,7 +35,10 @@ catch(error){
 };
 
 const getNotesById = async(req, res) => {
-  const note = await Note.findById(req.params.id)
+  const note = await Note.findOne({
+    _id: req.params.id,
+    userId: req.user.id
+  })
     if(!note){
      return res.status(404).json({
       error:"The selected note id is not found"
@@ -46,8 +52,11 @@ const updateNotes = async(req, res) => {
   if (!title || !description) {
     return res.status(400).json({ error: "title and description is required" });
   }
-  const note = await Note.findByIdAndUpdate(
-    req.params.id,
+  const note = await Note.findOneAndUpdate(
+    {
+     _id: req.params.id,
+      userId: req.user.id
+    },
      {
         title, 
         description,
@@ -69,7 +78,10 @@ catch(error){
 };
 const deleteNotes = async(req, res) => {
   try{
-  const note = await Note.findByIdAndDelete(req.params.id)
+  const note = await Note.findOneAndDelete({
+    _id: req.params.id,
+    userId: req.user.id
+  })
   if(!note){
     return res.status(404).json({
       error: "note not found"

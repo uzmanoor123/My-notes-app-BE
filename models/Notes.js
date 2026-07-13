@@ -1,3 +1,4 @@
+const { required } = require("joi");
 const mongoose = require ("mongoose");
 const noteSchema = new mongoose.Schema({
     title:{
@@ -16,6 +17,11 @@ const noteSchema = new mongoose.Schema({
        type: Date,
         default: Date.now
     },
+    userId:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: "true"
+    }
 })
 const Note = mongoose.model("Notes", noteSchema);
 module.exports = Note;
