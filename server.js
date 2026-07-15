@@ -6,16 +6,15 @@ const app = express();
 app.use(express.json());
 app.use(cors({ origin: "*" }));
 
-const notesRoutes = require('./routes/notesRoutes')
-app.use('/api/notes', notesRoutes)
+const notesRoutes = require("./routes/notesRoutes");
+app.use("/api/notes", notesRoutes);
 
-const userRoutes = require('./routes/userRoutes')
-app.use('/api/auth', userRoutes)
+const userRoutes = require("./routes/userRoutes");
+app.use("/api/auth", userRoutes);
 
 app.get("/", (req, res) => {
   res.send("backend running");
 });
-
 
 mongoose
   .connect(process.env.MONGO_URI)
